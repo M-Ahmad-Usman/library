@@ -20,6 +20,19 @@ function Book(title, author, pages, haveRead) {
     this.haveRead = haveRead;
 }
 
-Book.prototype.info = function() {
-    return `${this.title} by ${this.author}, ${this.pages} pages, ${this.haveRead ? "completed": "not read yet"}`;
+Book.prototype.info = function () {
+    return `${this.title} by ${this.author}, ${this.pages} pages, ${this.haveRead ? "completed" : "not read yet"}`;
+}
+
+const myLibrary = [];
+
+function addBookToLibrary(title, author, pages, haveRead) {
+    try {
+        const newBook = new Book(title, author, pages, haveRead);
+        myLibrary.push(newBook);
+    }
+    catch (error) {
+        console.error(error.message);
+        return;
+    }
 }
