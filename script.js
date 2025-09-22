@@ -3,14 +3,17 @@ function Book(title, author, pages, haveRead) {
     // Do nothing if function is invoked without new keyword
     if (!new.target) throw new Error("You must use the 'new' operator to call the constructor");
 
-    if (!(
-            (typeof title === "string" && title.trim() !== "") && 
-            (typeof author === "string" && author.trim() !== "") && 
-            (typeof pages === "number") &&
-            (typeof haveRead === "boolean"))
-            
-        ) throw new Error("All fields are required.");
+    if (typeof title !== "string" && title.trim() !== "")
+        throw new Error("Title field is required.");
+    if (typeof author !== "string" && author.trim() !== "")
+        throw new Error("Title field is required.");
+    if (typeof pages !== "number")
+        throw new Error("Title field is required.");
+    if (typeof haveRead !== "boolean")
+        throw new Error("Title field is required.");
 
+
+    this.id = crypto.randomUUID();
     this.title = title;
     this.author = author;
     this.pages = pages;
