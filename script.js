@@ -36,3 +36,35 @@ function addBookToLibrary(title, author, pages, haveRead) {
         return;
     }
 }
+
+function renderBooks() {
+    const fragment = document.createDocumentFragment();
+    const tableBody = document.querySelector(".books>tbody");
+
+    myLibrary.map(book => {
+        const row = document.createElement("tr");
+        
+        row.innerHTML += 
+            `<td>${book.title}</td>
+            <td>${book.author}</td>
+            <td>${book.pages}</td>
+            <td>${book.haveRead? "Yes": "No"}</td>`;
+        
+        fragment.appendChild(row);
+    })
+
+    tableBody.appendChild(fragment);
+    
+}
+
+addBookToLibrary("The Hobbit", "J.R.R. Tolkien", 310, true);
+addBookToLibrary("To Kill a Mockingbird", "Harper Lee", 281, true);
+addBookToLibrary("Pride and Prejudice", "Jane Austen", 279, false);
+addBookToLibrary("The Great Gatsby", "F. Scott Fitzgerald", 180, true);
+addBookToLibrary("Moby Dick", "Herman Melville", 635, false);
+addBookToLibrary("War and Peace", "Leo Tolstoy", 1225, false);
+addBookToLibrary("The Catcher in the Rye", "J.D. Salinger", 214, true);
+addBookToLibrary("Brave New World", "Aldous Huxley", 268, true);
+addBookToLibrary("The Lord of the Rings", "J.R.R. Tolkien", 1178, false);
+
+renderBooks()
