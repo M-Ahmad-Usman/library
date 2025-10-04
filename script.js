@@ -27,15 +27,7 @@ Book.prototype.info = function () {
 const myLibrary = [];
 
 function addBookToLibrary(title, author, pages, haveRead) {
-    let newBook;
-    
-    try {
-        newBook = new Book(title, author, pages, haveRead);
-    }
-    catch (error) {
-        return error;
-    }
-
+    const newBook = new Book(title, author, pages, haveRead);
     myLibrary.push(newBook);
 }
 
@@ -96,14 +88,19 @@ addBookBtn.addEventListener("click", () => {
 })
 
 addBookForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const isValid = addBookForm.reportValidity();
+    if (!isValid) return;
+
     try {
         addBookToLibrary(title.value, author.value, +pages.value, haveRead.checked);
-    } 
+    }
     catch (error) {
-        console.log(error)
         alert(error.message);
         return;
     }
     renderBooks();
     addBookForm.reset();
+    addBookDialog.close();
 })
