@@ -41,11 +41,14 @@ function renderBooks() {
     myLibrary.map(book => {
         const row = document.createElement("tr");
 
+        const checkedCheckbox = '<input type="checkbox" data-completed-status=true checked></input>'
+        const uncheckedCheckbox = '<input type="checkbox" data-completed-status=false ></input>'
+
         row.innerHTML +=
             `<td>${book.title}</td>
             <td>${book.author}</td>
             <td>${book.pages}</td>
-            <td>${book.haveRead ? "Yes" : "No"}</td>
+            <td>${book.haveRead ? checkedCheckbox : uncheckedCheckbox}</td>
             <td class="delete-book-btn"><button>Delete</button></td>`;
 
         row.dataset.id = book.id;
@@ -114,12 +117,25 @@ booksTable.addEventListener("click", (e) => {
 
     let target = e.target;
 
-    if (!(target instanceof HTMLButtonElement) && target.classList.includes("delete-book-btn")) 
-        return;
+    // Delete button functionality
+    if ((target instanceof HTMLButtonElement)) {
+        if (target.classList.includes("delete-book-btn")) {
+            let deleteBookId = target.closest("tr").dataset.id;
 
-    let deleteBookId = target.closest("tr").dataset.id;
+            let index = myLibrary.findIndex(book => book.id === deleteBookId);
+            myLibrary.splice(index, 1);
+            renderBooks();
+        }
+    }
 
-    let index = myLibrary.findIndex(book => book.id === deleteBookId);
-    myLibrary.splice(index, 1);
-    renderBooks();
+    // Completed status editing functionality
+    if (target instanceof HTMLInputElement && target.hasAttribute("data-completed-status")) {
+        const completedStatus = target.dataset.completedStatus;
+        target.dataset.completedStatus = !completedStatus;
+
+        const bookId = target.closest("tr").dataset.id;
+        const bookIndex = myLibrary.findIndex(book => book.id === bookId);
+
+        myLibrary[bookIndex].haveRead = !completedStatus;
+    }
 })
