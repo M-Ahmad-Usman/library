@@ -12,6 +12,37 @@
     <div class="container">
         <h1>My Library</h1>
 
+        <button id="add-book-btn">Add New Book</button>
+
+        <dialog id="add-book-dialog">
+            <form id="add-book-form" method="dialog">
+                
+                <h2>Add New Book</h2>
+
+                <div class="input-container">
+                    <label for="title">Title:</label>
+                    <input type="text" name="title" id="title" required autofocus>
+                </div>
+
+                <div class="input-container">
+                    <label for="author">Author:</label>
+                    <input type="text" required name="author" id="author">
+                </div>
+
+                <div class="input-container">
+                    <label for="pages">Pages:</label>
+                    <input type="number" name="pages" required id="pages" pattern="[0-9]+">
+                </div>
+
+                <div class="checkbox-container">
+                    <label for="have-read">Have Read</label>
+                    <input type="checkbox" name="have-read" id="have-read">
+                </div>
+
+                <button type="submit" id="submit-form-btn">Add Book</button>
+            </form>
+        </dialog>
+
         <table class="books">
             <thead>
                 <th>Title</th>
