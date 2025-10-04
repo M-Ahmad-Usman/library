@@ -45,7 +45,10 @@ function renderBooks() {
             `<td>${book.title}</td>
             <td>${book.author}</td>
             <td>${book.pages}</td>
-            <td>${book.haveRead ? "Yes" : "No"}</td>`;
+            <td>${book.haveRead ? "Yes" : "No"}</td>
+            <td class="delete-book-btn"><button>Delete</button></td>`;
+
+        row.dataset.id = book.id;
 
         fragment.appendChild(row);
     })
@@ -70,6 +73,7 @@ renderBooks();
 const addBookBtn = document.querySelector("#add-book-btn");
 const addBookDialog = document.querySelector("#add-book-dialog");
 const addBookForm = document.querySelector("#add-book-form");
+const booksTable = document.querySelector(".books");
 
 // Form inputs
 const formElements = [...addBookForm.elements];
@@ -103,4 +107,19 @@ addBookForm.addEventListener("submit", (e) => {
     renderBooks();
     addBookForm.reset();
     addBookDialog.close();
+});
+
+// Delete book functionality. Using event delegation
+booksTable.addEventListener("click", (e) => {
+
+    let target = e.target;
+
+    if (!(target instanceof HTMLButtonElement) && target.classList.includes("delete-book-btn")) 
+        return;
+
+    let deleteBookId = target.closest("tr").dataset.id;
+
+    let index = myLibrary.findIndex(book => book.id === deleteBookId);
+    myLibrary.splice(index, 1);
+    renderBooks();
 })
