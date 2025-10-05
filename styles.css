@@ -102,13 +102,13 @@ dialog {
     padding: 2rem 1rem;
 }
 
-#add-book-form input {
+#book-form input {
     padding: 4px 8px;
     border-radius: 4px;
     border: 1px solid black;
 }
 
-#add-book-form input:focus-visible {
+#book-form input:focus-visible {
     border-color: rgb(52, 160, 180);
 }
 
