@@ -48,8 +48,8 @@ function renderBooks() {
     myLibrary.map(book => {
         const row = document.createElement("tr");
 
-        const checkedCheckbox = '<input type="checkbox" data-completed-status=true checked></input>'
-        const uncheckedCheckbox = '<input type="checkbox" data-completed-status=false ></input>'
+        const checkedCheckbox = '<input type="checkbox" data-completed-status="true" checked></input>'
+        const uncheckedCheckbox = '<input type="checkbox" data-completed-status="false" ></input>'
 
         row.innerHTML +=
             `<td>${book.title}</td>
@@ -220,7 +220,8 @@ booksTable.addEventListener("click", (e) => {
 
     // Completed status editing functionality
     if (target instanceof HTMLInputElement && target.hasAttribute("data-completed-status")) {
-        const completedStatus = target.dataset.completedStatus;
+        const completedStatus = target.dataset.completedStatus === "true"? true: false;
+
         target.dataset.completedStatus = !completedStatus;
 
         const bookId = target.closest("tr").dataset.id;
