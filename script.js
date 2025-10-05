@@ -89,15 +89,38 @@ const bookFormTitle = document.querySelector("#form-title");
 
 const booksTable = document.querySelector(".books");
 
-// Form inputs
-const bookFormElements = [...bookForm.elements];
+// Form controls
+const bookFormElements = [...bookForm.elements].
+    reduce((accum, curr) => {
 
-// Depends on the order of declaration in index.html
-const [titleInput, authorInput, pagesInput, haveReadInput] = bookFormElements;
+        if (curr instanceof HTMLInputElement) {
+            // Generate key for input element
+            // The pattern will be elementInput
+            const key = curr.getAttribute("id").replaceAll(/[-\s]/g, "").toLowerCase() + "Input";
+            accum[key] = curr;
+            return accum;
+        }
+        else if (curr instanceof HTMLButtonElement) {
 
-const closeBookFormBtn = bookFormElements[bookFormElements.length - 2];
+            // If curr is submit button
+            if (curr.getAttribute("type") === "submit") {
+                const key = "submitFormBtn";
+                accum[key] = curr;
+            }
+            // If curr is cancel button
+            else if (curr.getAttribute("id").includes("cancel")) {
+                const key = "cancelFormBtn";
+                accum[key] = curr;
+            }
 
-closeBookFormBtn.addEventListener("click", () => {
+            return accum;
+        }
+    }, {});
+
+// Final shape will be
+// bookFormElements = { titleInput, authorInput, ..., cancelFormBtn, submitFormBtn }
+
+bookFormElements.cancelFormBtn.addEventListener("click", () => {
     bookDialog.close();
 })
 
@@ -113,10 +136,10 @@ bookForm.addEventListener("submit", (e) => {
     const isValid = bookForm.reportValidity();
     if (!isValid) return;
 
-    const title = titleInput.value;
-    const author = authorInput.value;
-    const pages = +pagesInput.value;
-    const haveRead = haveReadInput.checked;
+    const title = bookFormElements.titleInput.value;
+    const author = bookFormElements.authorInput.value;
+    const pages = +bookFormElements.pagesInput.value;
+    const haveRead = bookFormElements.havereadInput.checked;
 
     // If form is for Adding new book
     if (bookForm.dataset.form === "add-book") {
@@ -186,10 +209,10 @@ booksTable.addEventListener("click", (e) => {
             bookFormTitle.textContent = "Edit Book Info"
 
             // Update the form with book's current data
-            titleInput.value = book.title;
-            authorInput.value = book.author;
-            pagesInput.value = book.pages;
-            haveReadInput.checked = book.haveRead;
+            bookFormElements.titleInput.value = book.title;
+            bookFormElements.authorInput.value = book.author;
+            bookFormElements.pagesInput.value = book.pages;
+            bookFormElements.havereadInput.checked = book.haveRead;
 
             bookDialog.showModal();
         }
