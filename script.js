@@ -125,7 +125,10 @@ bookFormElements.cancelFormBtn.addEventListener("click", () => {
 })
 
 addBookBtn.addEventListener("click", () => {
+
     bookFormTitle.textContent = "Add New Book";
+    bookFormElements.submitFormBtn.textContent = "Add Book";
+
     bookForm.dataset.form = "add-book";
     bookDialog.showModal();
 })
@@ -207,6 +210,7 @@ booksTable.addEventListener("click", (e) => {
 
             // Update the form's title
             bookFormTitle.textContent = "Edit Book Info"
+            bookFormElements.submitFormBtn.textContent = "Edit Book";
 
             // Update the form with book's current data
             bookFormElements.titleInput.value = book.title;
