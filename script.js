@@ -95,6 +95,11 @@ const bookFormElements = [...bookForm.elements];
 // Depends on the order of declaration in index.html
 const [titleInput, authorInput, pagesInput, haveReadInput] = bookFormElements;
 
+const closeBookFormBtn = bookFormElements[bookFormElements.length - 2];
+
+closeBookFormBtn.addEventListener("click", () => {
+    bookDialog.close();
+})
 
 addBookBtn.addEventListener("click", () => {
     bookFormTitle.textContent = "Add New Book";

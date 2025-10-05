@@ -124,13 +124,16 @@ dialog {
     gap: 8px;
 }
 
-#submit-form-btn {
-    display: block;
-    margin: auto;
+form button {
     padding: 4px 8px;
     border-radius: 8px;
     border: 1px solid black;
     cursor: pointer;
+}
+
+.form-btns {
+    display: flex;
+    justify-content: space-between;
 }
 
 input[type='number'] {
