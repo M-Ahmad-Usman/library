@@ -95,7 +95,7 @@ td {
     padding: 4px;
 }
 
-#add-book-dialog {
+dialog {
     margin: auto;
     border: none;
     border-radius: 1rem;

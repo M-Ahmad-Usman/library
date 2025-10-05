@@ -3,15 +3,8 @@ function Book(title, author, pages, haveRead) {
     // Do nothing if function is invoked without new keyword
     if (!new.target) throw new Error("You must use the 'new' operator to call the constructor");
 
-    if (typeof title !== "string" || title.trim() === "")
-        throw new Error("Title field is required.");
-    if (typeof author !== "string" || author.trim() === "")
-        throw new Error("Author field is required.");
-    if (typeof pages !== "number")
-        throw new Error("Pages field is required and must be a number.");
-    if (typeof haveRead !== "boolean")
-        throw new Error("haveRead property must be boolean.");
-
+    // Will throw error if something is wrong
+    validateBookInput(title, author, pages, haveRead);
 
     this.id = crypto.randomUUID();
     this.title = title;
@@ -22,6 +15,20 @@ function Book(title, author, pages, haveRead) {
 
 Book.prototype.info = function () {
     return `${this.title} by ${this.author}, ${this.pages} pages, ${this.haveRead ? "completed" : "not read yet"}`;
+}
+
+function validateBookInput(title, author, pages, haveRead) {
+
+    if (typeof title !== "string" || title.trim() === "")
+        throw new Error("Title field is required.");
+    if (typeof author !== "string" || author.trim() === "")
+        throw new Error("Author field is required.");
+    if (typeof pages !== "number")
+        throw new Error("Pages field is required and must be a number.");
+    if (typeof haveRead !== "boolean")
+        throw new Error("haveRead property must be boolean.");
+
+    return true;
 }
 
 const myLibrary = [];
@@ -49,7 +56,8 @@ function renderBooks() {
             <td>${book.author}</td>
             <td>${book.pages}</td>
             <td>${book.haveRead ? checkedCheckbox : uncheckedCheckbox}</td>
-            <td class="delete-book-btn"><button>Delete</button></td>`;
+            <td><button class="delete-book-btn">Delete</button></td>
+            <td><button class="edit-book-btn">Edit</button></td>`;
 
         row.dataset.id = book.id;
 
@@ -74,57 +82,111 @@ renderBooks();
 
 // References
 const addBookBtn = document.querySelector("#add-book-btn");
-const addBookDialog = document.querySelector("#add-book-dialog");
-const addBookForm = document.querySelector("#add-book-form");
+
+const bookDialog = document.querySelector("#book-dialog");
+const bookForm = document.querySelector("#book-form");
+const bookFormTitle = document.querySelector("#form-title");
+
 const booksTable = document.querySelector(".books");
 
 // Form inputs
-const formElements = [...addBookForm.elements];
+const bookFormElements = [...bookForm.elements];
 
 // Depends on the order of declaration in index.html
-const [title, author, pages, haveRead] = formElements;
+const [titleInput, authorInput, pagesInput, haveReadInput] = bookFormElements;
 
-// We can also do this
-// const title = formElements.find(element => element.getAttribute("id") === "title").value;
-// const author = formElements.find(element => element.getAttribute("id") === "author").value;
-// const pages = formElements.find(element => element.getAttribute("id") === "pages").value;
-// const haveRead = formElements.find(element => element.getAttribute("id") === "have-read").checked;
 
 addBookBtn.addEventListener("click", () => {
-    addBookDialog.showModal();
+    bookFormTitle.textContent = "Add New Book";
+    bookForm.dataset.form = "add-book";
+    bookDialog.showModal();
 })
 
-addBookForm.addEventListener("submit", (e) => {
+bookForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const isValid = addBookForm.reportValidity();
+    const isValid = bookForm.reportValidity();
     if (!isValid) return;
 
-    try {
-        addBookToLibrary(title.value, author.value, +pages.value, haveRead.checked);
+    const title = titleInput.value;
+    const author = authorInput.value;
+    const pages = +pagesInput.value;
+    const haveRead = haveReadInput.checked;
+
+    // If form is for Adding new book
+    if (bookForm.dataset.form === "add-book") {
+        try {
+            validateBookInput(title, author, pages, haveRead);
+        }
+        catch (error) {
+            alert(error.message);
+            return;
+        }
+
+        addBookToLibrary(title, author, pages, haveRead);
+        renderBooks();
+        bookForm.reset();
+        bookDialog.close();
     }
-    catch (error) {
-        alert(error.message);
-        return;
+    // If form is for editing book details
+    else if (bookForm.dataset.form === "edit-book") {
+        try {
+            validateBookInput(title, author, pages, haveRead);
+        }
+        catch (error) {
+            alert(error.message);
+            return;
+        }
+
+        // BookId has been added by the edit button
+        const bookId = bookDialog.dataset.bookId;
+        // Find index of book with specified bookId
+        const bookIndex = myLibrary.findIndex(book => book.id === bookId);
+
+        myLibrary[bookIndex] = { ...myLibrary[bookIndex], title, author, pages, haveRead };
+        renderBooks();
+        bookForm.reset();
+        bookDialog.close();
     }
-    renderBooks();
-    addBookForm.reset();
-    addBookDialog.close();
 });
 
-// Delete book functionality. Using event delegation
+// Buttons and editing haveRead functionality. Using event delegation
 booksTable.addEventListener("click", (e) => {
 
     let target = e.target;
 
-    // Delete button functionality
     if ((target instanceof HTMLButtonElement)) {
-        if (target.classList.includes("delete-book-btn")) {
+
+        // Delete button functionality
+        if (target.classList.contains("delete-book-btn")) {
             let deleteBookId = target.closest("tr").dataset.id;
 
             let index = myLibrary.findIndex(book => book.id === deleteBookId);
             myLibrary.splice(index, 1);
             renderBooks();
+        }
+
+        // Edit button functionality
+        else if (target.classList.contains("edit-book-btn")) {
+            // This will help to identify the purpose of bookForm
+            bookForm.dataset.form = "edit-book";
+
+            let editBookId = target.closest("tr").dataset.id;
+            // This bookId will be used by the bookForm to update the correct book's info
+            bookDialog.dataset.bookId = editBookId;
+
+            const book = myLibrary.find(book => book.id === editBookId);
+
+            // Update the form's title
+            bookFormTitle.textContent = "Edit Book Info"
+
+            // Update the form with book's current data
+            titleInput.value = book.title;
+            authorInput.value = book.author;
+            pagesInput.value = book.pages;
+            haveReadInput.checked = book.haveRead;
+
+            bookDialog.showModal();
         }
     }
 
