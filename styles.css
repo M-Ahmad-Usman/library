@@ -81,18 +81,52 @@ h6 {
     gap: 16px;
 }
 
-table,
-th,
-td,
-thead,
-tbody {
-    border: 1px solid black;
+.books {
+    width: 100%;
+    max-width: 700px;
+    margin: 2rem auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
     border-collapse: collapse;
+    font-size: 1rem;
 }
 
-th,
-td {
-    padding: 4px;
+.books th,
+.books td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #eaeaea;
+    text-align: left;
+}
+
+.books th {
+    background: #f8f8f8;
+    font-weight: 600;
+    color: #333;
+}
+
+.books tr:last-child td {
+    border-bottom: none;
+}
+
+.books tbody tr:hover {
+    background: #f4f6fa;
+    transition: background 0.2s;
+}
+
+.books td button {
+    background: #eee;
+    color: #333;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.books td button:hover {
+    background: #e0e0e0;
 }
 
 dialog {
@@ -137,7 +171,7 @@ form button {
 }
 
 input[type='number'] {
-    -moz-appearance:textfield;
+    -moz-appearance: textfield;
 }
 
 input::-webkit-outer-spin-button,
