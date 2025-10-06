@@ -224,7 +224,7 @@ booksTable.addEventListener("click", (e) => {
 
     // Completed status editing functionality
     if (target instanceof HTMLInputElement && target.hasAttribute("data-completed-status")) {
-        const completedStatus = target.dataset.completedStatus === "true"? true: false;
+        const completedStatus = target.dataset.completedStatus === "true";
 
         target.dataset.completedStatus = !completedStatus;
 
