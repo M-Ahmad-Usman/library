@@ -59,7 +59,7 @@ function renderBooks() {
             <td><button class="delete-book-btn">Delete</button></td>
             <td><button class="edit-book-btn">Edit</button></td>`;
 
-        row.dataset.id = book.id;
+        row.dataset.bookId = book.id;
 
         fragment.appendChild(row);
     })
@@ -190,7 +190,7 @@ booksTable.addEventListener("click", (e) => {
 
         // Delete button functionality
         if (target.classList.contains("delete-book-btn")) {
-            let deleteBookId = target.closest("tr").dataset.id;
+            let deleteBookId = target.closest("tr").dataset.bookId;
 
             let index = myLibrary.findIndex(book => book.id === deleteBookId);
             myLibrary.splice(index, 1);
@@ -202,7 +202,7 @@ booksTable.addEventListener("click", (e) => {
             // This will help to identify the purpose of bookForm
             bookForm.dataset.form = "edit-book";
 
-            let editBookId = target.closest("tr").dataset.id;
+            let editBookId = target.closest("tr").dataset.bookId;
             // This bookId will be used by the bookForm to update the correct book's info
             bookDialog.dataset.bookId = editBookId;
 
@@ -228,7 +228,7 @@ booksTable.addEventListener("click", (e) => {
 
         target.dataset.completedStatus = !completedStatus;
 
-        const bookId = target.closest("tr").dataset.id;
+        const bookId = target.closest("tr").dataset.bookId;
         const bookIndex = myLibrary.findIndex(book => book.id === bookId);
 
         myLibrary[bookIndex].haveRead = !completedStatus;
