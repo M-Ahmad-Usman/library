@@ -158,11 +158,14 @@ dialog {
     gap: 8px;
 }
 
+button {
+    cursor: pointer;
+}
+
 form button {
     padding: 4px 8px;
     border-radius: 8px;
     border: 1px solid black;
-    cursor: pointer;
 }
 
 .form-btns {
@@ -182,6 +185,6 @@ input::-webkit-inner-spin-button {
 /* Media Queries */
 @media screen and (min-width: 768px) {
     dialog {
-        min-width: 400px;
+        min-width: 350px;
     }
 }
