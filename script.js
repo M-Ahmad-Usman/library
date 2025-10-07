@@ -49,7 +49,7 @@ function renderBooks() {
     const uncheckedCheckbox = '<input type="checkbox" data-completed-status="false" ></input>';
 
     myLibrary.map(book => {
-        const row = document.createElement("tr");   
+        const row = document.createElement("tr");
 
         row.innerHTML +=
             `<td>${book.title}</td>
@@ -66,6 +66,24 @@ function renderBooks() {
 
     tableBody.appendChild(fragment);
 
+}
+
+function convertKebabIntoCamel(name) {
+
+    if (!(typeof name === "string")) throw new Error("String type is required for converting naming");
+
+    let tokens = name.toLowerCase().split("-");
+
+    let camelCaseName = tokens.
+        map((token, index) => {
+
+            if (index === 0) return token;
+
+            return token[0].toUpperCase() + token.slice(1);;
+        }).
+        join("");
+
+    return camelCaseName;
 }
 
 addBookToLibrary("The Hobbit", "J.R.R. Tolkien", 310, true);
@@ -89,14 +107,23 @@ const bookFormTitle = document.querySelector("#form-title");
 
 const booksTable = document.querySelector(".books");
 
-// Form controls
+// Reduce bookFormElements array into an object
+// Final shape will be
+// bookFormElements = { titleInput, authorInput, ..., cancelFormBtn, submitFormBtn }
 const bookFormElements = [...bookForm.elements].
     reduce((accum, curr) => {
 
         if (curr instanceof HTMLInputElement) {
             // Generate key for input element
-            // The pattern will be elementInput
-            const key = curr.getAttribute("id").replaceAll(/[-\s]/g, "").toLowerCase() + "Input";
+            // The pattern will be elementInput like titleInput etc.
+
+            // Get input name like title, author etc
+            let inputName = curr.getAttribute("id").replaceAll(/\s/g, "").toLowerCase();
+
+            // If inputName is in kebab case
+            if (inputName.includes("-")) inputName = convertKebabIntoCamel(inputName);
+
+            const key = inputName + "Input";
             accum[key] = curr;
             return accum;
         }
@@ -117,9 +144,6 @@ const bookFormElements = [...bookForm.elements].
         }
     }, {});
 
-// Final shape will be
-// bookFormElements = { titleInput, authorInput, ..., cancelFormBtn, submitFormBtn }
-
 bookFormElements.cancelFormBtn.addEventListener("click", () => {
     bookDialog.close();
 })
@@ -129,6 +153,7 @@ addBookBtn.addEventListener("click", () => {
     bookFormTitle.textContent = "Add New Book";
     bookFormElements.submitFormBtn.textContent = "Add Book";
 
+    // This will be used by form submission handler
     bookForm.dataset.form = "add-book";
     bookDialog.showModal();
 })
@@ -142,7 +167,7 @@ bookForm.addEventListener("submit", (e) => {
     const title = bookFormElements.titleInput.value;
     const author = bookFormElements.authorInput.value;
     const pages = +bookFormElements.pagesInput.value;
-    const haveRead = bookFormElements.havereadInput.checked;
+    const haveRead = bookFormElements.haveReadInput.checked;
 
     // If form is for Adding new book
     if (bookForm.dataset.form === "add-book") {
@@ -216,7 +241,7 @@ booksTable.addEventListener("click", (e) => {
             bookFormElements.titleInput.value = book.title;
             bookFormElements.authorInput.value = book.author;
             bookFormElements.pagesInput.value = book.pages;
-            bookFormElements.havereadInput.checked = book.haveRead;
+            bookFormElements.haveReadInput.checked = book.haveRead;
 
             bookDialog.showModal();
         }
