@@ -45,11 +45,11 @@ function renderBooks() {
     // Reset previously rendered books.
     tableBody.innerHTML = "";
 
-    myLibrary.map(book => {
-        const row = document.createElement("tr");
+    const checkedCheckbox = '<input type="checkbox" data-completed-status="true" checked></input>';
+    const uncheckedCheckbox = '<input type="checkbox" data-completed-status="false" ></input>';
 
-        const checkedCheckbox = '<input type="checkbox" data-completed-status="true" checked></input>'
-        const uncheckedCheckbox = '<input type="checkbox" data-completed-status="false" ></input>'
+    myLibrary.map(book => {
+        const row = document.createElement("tr");   
 
         row.innerHTML +=
             `<td>${book.title}</td>
