@@ -109,7 +109,7 @@ const booksTable = document.querySelector(".books");
 
 // Reduce bookFormElements array into an object
 // Final shape will be
-// bookFormElements = { titleInput, authorInput, ..., cancelFormBtn, submitFormBtn }
+// bookFormElements = { titleInput, authorInput, haveReadInput ..., cancelFormBtn, submitFormBtn }
 const bookFormElements = [...bookForm.elements].
     reduce((accum, curr) => {
 
@@ -194,7 +194,7 @@ bookForm.addEventListener("submit", (e) => {
             return;
         }
 
-        // BookId has been added by the edit button
+        // BookId has been added by the edit button click handler
         const bookId = bookDialog.dataset.bookId;
         // Find index of book with specified bookId
         const bookIndex = myLibrary.findIndex(book => book.id === bookId);
@@ -206,7 +206,7 @@ bookForm.addEventListener("submit", (e) => {
     }
 });
 
-// Buttons and editing haveRead functionality. Using event delegation
+// Buttons and haveRead toggle functionality. Using event delegation
 booksTable.addEventListener("click", (e) => {
 
     let target = e.target;
@@ -247,7 +247,7 @@ booksTable.addEventListener("click", (e) => {
         }
     }
 
-    // Completed status editing functionality
+    // haveRead toggle functionality
     if (target instanceof HTMLInputElement && target.hasAttribute("data-completed-status")) {
         const completedStatus = target.dataset.completedStatus === "true";
 
@@ -256,6 +256,7 @@ booksTable.addEventListener("click", (e) => {
         const bookId = target.closest("tr").dataset.bookId;
         const bookIndex = myLibrary.findIndex(book => book.id === bookId);
 
+        // Update the haveRead key's value
         myLibrary[bookIndex].haveRead = !completedStatus;
     }
 })
